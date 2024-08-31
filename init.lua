@@ -235,7 +235,7 @@ require('lazy').setup({
     -- },
   },
 
-  {
+  { -- laravel blade navigation
     'ricardoramirezr/blade-nav.nvim',
     dependencies = {
       'hrsh7th/nvim-cmp', -- if using nvim-cmp
@@ -454,8 +454,7 @@ require('lazy').setup({
 
   { 'Bilal2453/luvit-meta', lazy = true },
 
-  {
-    -- Main LSP Configuration
+  { -- Main LSP Configuration
     'neovim/nvim-lspconfig',
     dependencies = {
       -- Automatically install LSPs and related tools to stdpath for Neovim
@@ -880,64 +879,74 @@ require('lazy').setup({
         transparent_mode = true,
       }
       vim.cmd.colorscheme 'gruvbox'
-      -- vim.cmd [[colorscheme gruvbox]]
     end,
   },
 
   -- Highlight todo, notes, etc in comments
   { 'folke/todo-comments.nvim', event = 'VimEnter', dependencies = { 'nvim-lua/plenary.nvim' }, opts = { signs = false } },
 
-  { -- Collection of various small independent plugins/modules
-    'echasnovski/mini.nvim',
-    config = function()
-      -- Better Around/Inside textobjects
-      --
-      -- Examples:
-      --  - va)  - [V]isually select [A]round [)]paren
-      --  - yinq - [Y]ank [I]nside [N]ext [Q]uote
-      --  - ci'  - [C]hange [I]nside [']quote
-      require('mini.ai').setup { n_lines = 500 }
-
-      -- Add/delete/replace surroundings (brackets, quotes, etc.)
-      --
-      -- - saiw) - [S]urround [A]dd [I]nner [W]ord [)]Paren
-      -- - sd'   - [S]urround [D]elete [']quotes
-      -- - sr)'  - [S]urround [R]eplace [)] [']
-      require('mini.surround').setup()
-
-      -- Simple and easy statusline.
-      --  You could remove this setup call if you don't like it,
-      --  and try some other statusline plugin
-      local statusline = require 'mini.statusline'
-      statusline.setup { use_icons = vim.g.have_nerd_font }
-      --
-      ---@diagnostic disable-next-line: duplicate-set-field
-      statusline.section_location = function()
-        return '%2l:%-2v'
-      end
-
-      -- ... and there is more!
-      --  Check out: https://github.com/echasnovski/mini.nvim
-    end,
+  { -- Surround stuffs
+    'kylechui/nvim-surround',
+    event = { 'BufReadPre', 'BufNewFile' },
+    enabled = true,
+    version = '*', -- Use for stability; omit to use `main` branch for the latest features
+    config = true,
   },
 
   { -- Highlight, edit, and navigate code
     'nvim-treesitter/nvim-treesitter',
     build = ':TSUpdate',
     main = 'nvim-treesitter.configs', -- Sets main module to use for opts
-    -- [[ Configure Treesitter ]] See `:help nvim-treesitter`
     opts = {
-      ensure_installed = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc', 'php', 'php_only' },
+      ensure_installed = {
+        'bash',
+        'c',
+        'comment',
+        'css',
+        'diff',
+        'dockerfile',
+        'git_config',
+        'git_rebase',
+        'gitattributes',
+        'gitcommit',
+        'gitignore',
+        'go',
+        'html',
+        'http',
+        'ini',
+        'javascript',
+        'json',
+        'jsonc',
+        'lua',
+        'luadoc',
+        'make',
+        'markdown',
+        'markdown_inline',
+        'query',
+        'vim',
+        'vimdoc',
+        'passwd',
+        'php',
+        'php_only',
+        'phpdoc',
+        'python',
+        'regex',
+        'rust',
+        'sql',
+        'svelte',
+        'typescript',
+        'vue',
+        'xml',
+        'yaml',
+      },
+
       -- Autoinstall languages that are not installed
       auto_install = true,
-      highlight = {
-        enable = true,
-        -- Some languages depend on vim's regex highlighting system (such as Ruby) for indent rules.
-        --  If you are experiencing weird indenting issues, add the language to
-        --  the list of additional_vim_regex_highlighting and disabled languages for indent.
-        additional_vim_regex_highlighting = { 'ruby' },
-      },
+      highlight = { enable = true },
       indent = { enable = true, disable = { 'ruby' } },
+      rainbow = {
+        enable = true,
+      },
     },
     -- There are additional nvim-treesitter modules that you can use to interact
     -- with nvim-treesitter. You should go explore a few and see what interests you:
