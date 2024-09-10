@@ -109,7 +109,7 @@ vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagn
 --
 -- NOTE: This won't work in all terminal emulators/tmux/etc. Try your own mapping
 -- or just use <C-\><C-n> to exit terminal mode
-vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>', { desc = 'Exit terminal mode' })
+-- vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>', { desc = 'Exit terminal mode' })
 
 -- TIP: Disable arrow keys in normal mode
 -- vim.keymap.set('n', '<left>', '<cmd>echo "Use h to move!!"<CR>')
@@ -172,8 +172,9 @@ vim.keymap.set({ 'i', 'x', 'n', 's' }, '<C-s>', '<cmd>w<cr><esc>', { desc = 'Sav
 vim.keymap.set('v', '<', '<gv')
 vim.keymap.set('v', '>', '>gv')
 
-vim.keymap.set('x', '<leader>p', '"_dp')
-vim.keymap.set('n', '<leader>rp', [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]])
+vim.keymap.set('x', '<leader>p', '"_dp', { desc = 'Paste yanked without overriding' })
+vim.keymap.set('n', '<leader>rp', [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/g<Left><Left><Left>]], { desc = 'Replace in current line using vim regex' })
+vim.keymap.set('n', '<leader>Rp', [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]], { desc = 'Replace all using vim regex' })
 
 -- Toggle Netrw
 vim.keymap.set('n', '<leader>e', '<cmd>:Ex<cr>', { desc = 'Toggle Explorer' })
@@ -555,8 +556,10 @@ require('lazy').setup({
           --
           -- When you move your cursor, the highlights will be cleared (the second autocommand).
           local client = vim.lsp.get_client_by_id(event.data.client_id)
+
           if client and client.supports_method(vim.lsp.protocol.Methods.textDocument_documentHighlight) then
             local highlight_augroup = vim.api.nvim_create_augroup('kickstart-lsp-highlight', { clear = false })
+
             vim.api.nvim_create_autocmd({ 'CursorHold', 'CursorHoldI' }, {
               buffer = event.buf,
               group = highlight_augroup,
@@ -852,24 +855,6 @@ require('lazy').setup({
     end,
   },
 
-  { -- You can easily change to a different colorscheme.
-    -- Change the name of the colorscheme plugin below, and then
-    -- change the command in the config to whatever the name of that colorscheme is.
-    --
-    -- If you want to see what colorschemes are already installed, you can use `:Telescope colorscheme`.
-    'folke/tokyonight.nvim',
-    priority = 1000, -- Make sure to load this before all the other start plugins.
-    init = function()
-      -- Load the colorscheme here.
-      -- Like many other themes, this one has different styles, and you could load
-      -- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
-      -- vim.cmd.colorscheme 'tokyonight-night'
-
-      -- You can configure highlights by doing something like:
-      vim.cmd.hi 'Comment gui=none'
-    end,
-  },
-
   {
     'ellisonleao/gruvbox.nvim',
     lazy = false,
@@ -947,6 +932,15 @@ require('lazy').setup({
       rainbow = {
         enable = true,
       },
+      incremental_selection = {
+        enable = true,
+        keymaps = {
+          init_selection = 'gnn',
+          node_incremental = 'grn',
+          scope_incremental = 'grc',
+          node_decremental = 'grm',
+        },
+      },
     },
     -- There are additional nvim-treesitter modules that you can use to interact
     -- with nvim-treesitter. You should go explore a few and see what interests you:
@@ -968,6 +962,17 @@ require('lazy').setup({
       }
 
       require('nvim-treesitter.configs').setup(opts)
+    end,
+  },
+
+  {
+    'numToStr/Comment.nvim',
+    config = function()
+      local ft = require 'Comment.ft'
+
+      ft.set('html', { '{{-- %s --}}', '{{-- %s --}}' })
+
+      require('Comment').setup()
     end,
   },
 
@@ -998,25 +1003,31 @@ require('lazy').setup({
 
       vim.keymap.set('n', '<leader>a', function()
         harpoon:list():add()
-      end)
+      end, { desc = 'Add to Harpoon' })
+
       vim.keymap.set('n', '<C-e>', function()
         harpoon.ui:toggle_quick_menu(harpoon:list())
-      end)
+      end, { desc = 'View Harpoon menu' })
+
       vim.keymap.set('n', '<leader>1', function()
         harpoon:list():select(1)
-      end)
+      end, { desc = 'Goto Harpoon 1' })
+
       vim.keymap.set('n', '<leader>2', function()
         harpoon:list():select(2)
-      end)
+      end, { desc = 'Goto Harpoon 2' })
+
       vim.keymap.set('n', '<leader>3', function()
         harpoon:list():select(3)
-      end)
+      end, { desc = 'Goto Harpoon 3' })
+
       vim.keymap.set('n', '<leader>4', function()
         harpoon:list():select(4)
-      end)
+      end, { desc = 'Goto Harpoon 4' })
+
       vim.keymap.set('n', '<leader>5', function()
         harpoon:list():select(5)
-      end)
+      end, { desc = 'Goto Harpoon 5' })
     end,
   },
 
