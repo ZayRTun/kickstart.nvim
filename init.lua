@@ -855,6 +855,7 @@ require('lazy').setup({
     end,
   },
 
+  -- colorschemes
   {
     'ellisonleao/gruvbox.nvim',
     lazy = false,
@@ -863,7 +864,24 @@ require('lazy').setup({
       require('gruvbox').setup {
         transparent_mode = true,
       }
-      vim.cmd.colorscheme 'gruvbox'
+      -- vim.cmd.colorscheme 'gruvbox'
+    end,
+  },
+  {
+    'rose-pine/neovim',
+    name = 'rose-pine',
+    init = function()
+      require('rose-pine').setup {
+        styles = {
+          bold = true,
+          italic = true,
+          transparency = true,
+        },
+      }
+      -- vim.cmd.colorscheme 'rose-pine'
+      -- vim.cmd 'colorscheme rose-pine-main'
+      vim.cmd 'colorscheme rose-pine-moon'
+      -- vim.cmd 'colorscheme rose-pine-dawn'
     end,
   },
 
@@ -1038,6 +1056,42 @@ require('lazy').setup({
   {
     'abecodes/tabout.nvim',
     opts = {},
+  },
+
+  {
+    'folke/flash.nvim',
+    event = 'VeryLazy',
+    ---@type Flash.Config
+    opts = {},
+    -- stylua: ignore
+    keys = {
+      { "s", mode = { "n", "x", "o" }, function() require("flash").jump() end, desc = "Flash" },
+      { "S", mode = { "n", "x", "o" }, function() require("flash").treesitter() end, desc = "Flash Treesitter" },
+      -- { "r", mode = "o", function() require("flash").remote() end, desc = "Remote Flash" },
+      -- { "R", mode = { "o", "x" }, function() require("flash").treesitter_search() end, desc = "Treesitter Search" },
+      { "<c-s>", mode = { "c" }, function() require("flash").toggle() end, desc = "Toggle Flash Search" },
+    },
+  },
+
+  {
+    'stevearc/oil.nvim',
+    dependencies = { 'nvim-tree/nvim-web-devicons' },
+    ---@module 'oil'
+    ---@type oil.SetupOpts
+    opts = {},
+    config = function()
+      require('oil').setup {
+        keymapz = {
+          ['<C-s>'] = false,
+        },
+
+        view_options = {
+          show_hidden = true,
+        },
+
+        vim.keymap.set('n', '-', '<CMD>Oil<CR>', { desc = 'Open parent directory' }),
+      }
+    end,
   },
 
   -- The following two comments only work if you have downloaded the kickstart repo, not just copy pasted the
