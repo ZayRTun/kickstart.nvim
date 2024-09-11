@@ -1,18 +1,11 @@
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 
--- Set to true if you have a Nerd Font installed and selected in the terminal
 vim.g.have_nerd_font = true
-
--- [[ Setting options ]]
--- See `:help vim.opt`
--- NOTE: You can change these options as you wish!
---  For more options, you can see `:help option-list`
 
 -- Make line numbers default
 vim.opt.number = true
--- You can also add relative line numbers, to help with jumping.
---  Experiment for yourself to see if you like it!
+
 vim.opt.relativenumber = true
 
 -- Enable mouse mode, can be useful for resizing splits for example!
@@ -207,21 +200,6 @@ vim.opt.rtp:prepend(lazypath)
 
 -- Plugins
 require('lazy').setup({
-  -- NOTE: Plugins can be added with a link (or for a github repo: 'owner/repo' link).
-  'tpope/vim-sleuth', -- Detect tabstop and shiftwidth automatically
-
-  -- NOTE: Plugins can also be added by using a table,
-  -- with the first argument being the link and the following
-  -- keys can be used to configure plugin behavior/loading/etc.
-  --
-  -- Use `opts = {}` to force a plugin to be loaded.
-  --
-
-  -- Here is a more advanced example where we pass configuration
-  -- options to `gitsigns.nvim`. This is equivalent to the following Lua:
-  --    require('gitsigns').setup({ ... })
-  --
-  -- See `:help gitsigns` to understand what the configuration keys do
   { -- Adds git related signs to the gutter, as well as utilities for managing changes
     'lewis6991/gitsigns.nvim',
     opts = {},
@@ -243,21 +221,6 @@ require('lazy').setup({
     },
     ft = { 'blade', 'php' }, -- optional, improves startup time
   },
-
-  -- NOTE: Plugins can also be configured to run Lua code when they are loaded.
-  --
-  -- This is often very useful to both group configuration, as well as handle
-  -- lazy loading plugins that don't need to be loaded immediately at startup.
-  --
-  -- For example, in the following configuration, we use:
-  --  event = 'VimEnter'
-  --
-  -- which loads which-key before all the UI elements are loaded. Events can be
-  -- normal autocommands events (`:help autocmd-events`).
-  --
-  -- Then, because we use the `config` key, the configuration only runs
-  -- after the plugin has been loaded:
-  --  config = function() ... end
 
   { -- Useful plugin to show you pending keybinds.
     'folke/which-key.nvim',
@@ -470,36 +433,16 @@ require('lazy').setup({
       -- Allows extra capabilities provided by nvim-cmp
       'hrsh7th/cmp-nvim-lsp',
     },
-    config = function()
-      -- Brief aside: **What is LSP?**
-      --
-      -- LSP is an initialism you've probably heard, but might not understand what it is.
-      --
-      -- LSP stands for Language Server Protocol. It's a protocol that helps editors
-      -- and language tooling communicate in a standardized fashion.
-      --
-      -- In general, you have a "server" which is some tool built to understand a particular
-      -- language (such as `gopls`, `lua_ls`, `rust_analyzer`, etc.). These Language Servers
-      -- (sometimes called LSP servers, but that's kind of like ATM Machine) are standalone
-      -- processes that communicate with some "client" - in this case, Neovim!
-      --
-      -- LSP provides Neovim with features like:
-      --  - Go to definition
-      --  - Find references
-      --  - Autocompletion
-      --  - Symbol Search
-      --  - and more!
-      --
-      -- Thus, Language Servers are external tools that must be installed separately from
-      -- Neovim. This is where `mason` and related plugins come into play.
-      --
-      -- If you're wondering about lsp vs treesitter, you can check out the wonderfully
-      -- and elegantly composed help section, `:help lsp-vs-treesitter`
 
-      --  This function gets run when an LSP attaches to a particular buffer.
-      --    That is to say, every time a new file is opened that is associated with
-      --    an lsp (for example, opening `main.rs` is associated with `rust_analyzer`) this
-      --    function will be executed to configure the current buffer
+    config = function()
+      vim.lsp.handlers['textDocument/hover'] = vim.lsp.with(vim.lsp.handlers.hover, {
+        border = 'rounded',
+      })
+      -- vim.diagnostic.config {
+      --   virtual_text = false,
+      --   float = { border = 'rounded' },
+      -- }
+
       vim.api.nvim_create_autocmd('LspAttach', {
         group = vim.api.nvim_create_augroup('kickstart-lsp-attach', { clear = true }),
         callback = function(event)
@@ -735,6 +678,15 @@ require('lazy').setup({
           },
           stdin = false,
         },
+        pint = {
+          meta = {
+            url = 'https://github.com/laravel/pint',
+            description = 'Laravel Pint is an opinionated PHP code style fixer for minimalists. Pint is built on top of PHP-CS-Fixer and makes it simple to ensure that your code style stays clean and consistent.',
+          },
+          command = 'pint',
+          args = { '$FILENAME' },
+          stdin = false,
+        },
       },
     },
   },
@@ -787,6 +739,12 @@ require('lazy').setup({
             luasnip.lsp_expand(args.body)
           end,
         },
+
+        window = {
+          completion = cmp.config.window.bordered { border = 'single' },
+          documentation = cmp.config.window.bordered { border = 'single' },
+        },
+
         completion = { completeopt = 'menu,menuone,noinsert' },
 
         -- For an understanding of why these mappings were
@@ -857,6 +815,28 @@ require('lazy').setup({
 
   -- colorschemes
   {
+    'AlexvZyl/nordic.nvim',
+    lazy = false,
+    priority = 1000,
+    config = function()
+      -- local palette = require 'nordic.colors'
+      local nord = require 'nordic'
+
+      nord.setup {
+        transparent_bg = true,
+        telescope = {
+          -- Available styles: `classic`, `flat`.
+          style = 'classic',
+        },
+        cursorline = {
+          theme = 'light',
+        },
+      }
+
+      nord.load()
+    end,
+  },
+  {
     'ellisonleao/gruvbox.nvim',
     lazy = false,
     priority = 1000,
@@ -867,6 +847,7 @@ require('lazy').setup({
       -- vim.cmd.colorscheme 'gruvbox'
     end,
   },
+
   {
     'rose-pine/neovim',
     name = 'rose-pine',
@@ -895,6 +876,26 @@ require('lazy').setup({
     version = '*', -- Use for stability; omit to use `main` branch for the latest features
     config = true,
   },
+
+  -- { -- Collection of various small independent plugins/modules
+  --   'echasnovski/mini.nvim',
+  --   config = function()
+  --     -- Simple and easy statusline.
+  --     --  You could remove this setup call if you don't like it,
+  --     --  and try some other statusline plugin
+  --     local statusline = require 'mini.statusline'
+  --     -- set use_icons to true if you have a Nerd Font
+  --     statusline.setup { use_icons = vim.g.have_nerd_font }
+  --
+  --     -- You can configure sections in the statusline by overriding their
+  --     -- default behavior. For example, here we set the section for
+  --     -- cursor location to LINE:COLUMN
+  --     ---@diagnostic disable-next-line: duplicate-set-field
+  --     statusline.section_location = function()
+  --       return '%2l:%-2v'
+  --     end
+  --   end,
+  -- },
 
   { -- Highlight, edit, and navigate code
     'nvim-treesitter/nvim-treesitter',
@@ -1090,6 +1091,83 @@ require('lazy').setup({
         },
 
         vim.keymap.set('n', '-', '<CMD>Oil<CR>', { desc = 'Open parent directory' }),
+      }
+    end,
+  },
+
+  {
+    'nvim-lualine/lualine.nvim',
+    dependencies = { 'nvim-tree/nvim-web-devicons' },
+    enabled = true,
+    event = 'Colorscheme',
+    init = function()
+      local lualine = require 'lualine'
+
+      lualine.setup {
+        options = {
+          theme = 'nordic',
+          section_separators = { left = ' ', right = ' ' },
+          component_separators = { left = ' ', right = ' ' },
+        },
+
+        sections = {
+          lualine_a = {
+            { 'mode' },
+          },
+          lualine_b = {},
+          lualine_c = {
+            {
+              'diagnostics',
+              symbols = {
+                error = ' ',
+                warn = ' ',
+                info = ' ',
+                hint = '󰠠 ',
+              },
+            },
+            {
+              'filetype',
+              icon_only = true,
+              padding = { left = 1, right = 0 },
+            },
+            {
+              'filename',
+              file_status = true,
+              newfile_status = false,
+              path = 1,
+              shorting_target = 40,
+              symbols = {
+                modified = '[+]', -- Text to show when the file is modified.
+                readonly = '[-]', -- Text to show when the file is non-modifiable or readonly.
+                unnamed = '[No Name]', -- Text to show for unnamed buffers.
+                newfile = '[New]', -- Text to show for newly created file before first write
+              },
+            },
+          },
+          lualine_x = {
+            -- {
+            --   lazy_status.updates,
+            --   cond = lazy_status.has_updates,
+            --   color = { fg = t_colors.orange_500 },
+            -- },
+            { 'location' },
+            { 'progress' },
+            { 'selectioncount' },
+            { 'encoding' },
+            { 'branch' },
+          },
+          lualine_y = {},
+          lualine_z = {},
+        },
+
+        inactive_sections = {
+          lualine_a = {},
+          lualine_b = {},
+          lualine_c = { 'filename' },
+          lualine_x = { 'location' },
+          lualine_y = {},
+          lualine_z = {},
+        },
       }
     end,
   },
