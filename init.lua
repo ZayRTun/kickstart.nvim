@@ -11,6 +11,8 @@ vim.opt.relativenumber = true
 -- Enable mouse mode, can be useful for resizing splits for example!
 vim.opt.mouse = 'a'
 
+-- vim.opt.cmdheight = 0
+
 -- Don't show the mode, since it's already in the status line
 vim.opt.showmode = false
 
@@ -352,6 +354,9 @@ require('lazy').setup({
           find_files = {
             theme = 'dropdown',
           },
+          -- lsp_document_symbols = {
+          --   theme = 'dropdown',
+          -- },
         },
         extensions = {
           ['ui-select'] = {
@@ -861,7 +866,7 @@ require('lazy').setup({
       }
       -- vim.cmd.colorscheme 'rose-pine'
       -- vim.cmd 'colorscheme rose-pine-main'
-      vim.cmd 'colorscheme rose-pine-moon'
+      -- vim.cmd 'colorscheme rose-pine-moon'
       -- vim.cmd 'colorscheme rose-pine-dawn'
     end,
   },
@@ -984,21 +989,9 @@ require('lazy').setup({
     end,
   },
 
-  {
-    'numToStr/Comment.nvim',
-    config = function()
-      local ft = require 'Comment.ft'
+  { 'numToStr/Comment.nvim', opts = {} },
 
-      ft.set('html', { '{{-- %s --}}', '{{-- %s --}}' })
-
-      require('Comment').setup()
-    end,
-  },
-
-  {
-    'echasnovski/mini.bufremove',
-    opts = {},
-  },
+  { 'echasnovski/mini.bufremove', opts = {} },
 
   {
     'akinsho/toggleterm.nvim',
@@ -1096,6 +1089,41 @@ require('lazy').setup({
   },
 
   {
+    'folke/noice.nvim',
+    event = 'VeryLazy',
+    opts = {},
+    dependencies = {
+      -- if you lazy-load any plugin below, make sure to add proper `module="..."` entries
+      'MunifTanjim/nui.nvim',
+      -- OPTIONAL:
+      --   `nvim-notify` is only needed, if you want to use the notification view.
+      --   If not available, we use `mini` as the fallback
+      -- 'rcarriga/nvim-notify',
+    },
+
+    config = function()
+      require('noice').setup {
+        lsp = {
+          -- override markdown rendering so that **cmp** and other plugins use **Treesitter**
+          override = {
+            ['vim.lsp.util.convert_input_to_markdown_lines'] = true,
+            ['vim.lsp.util.stylize_markdown'] = true,
+            ['cmp.entry.get_documentation'] = true, -- requires hrsh7th/nvim-cmp
+          },
+        },
+        -- you can enable a preset for easier configuration
+        presets = {
+          bottom_search = true, -- use a classic bottom cmdline for search
+          command_palette = true, -- position the cmdline and popupmenu together
+          long_message_to_split = true, -- long messages will be sent to a split
+          inc_rename = false, -- enables an input dialog for inc-rename.nvim
+          lsp_doc_border = true, -- add a border to hover docs and signature help
+        },
+      }
+    end,
+  },
+
+  {
     'nvim-lualine/lualine.nvim',
     dependencies = { 'nvim-tree/nvim-web-devicons' },
     enabled = true,
@@ -1105,7 +1133,7 @@ require('lazy').setup({
 
       lualine.setup {
         options = {
-          theme = 'nordic',
+          theme = 'auto',
           section_separators = { left = ' ', right = ' ' },
           component_separators = { left = ' ', right = ' ' },
         },
@@ -1215,6 +1243,10 @@ require('lazy').setup({
     },
   },
 })
+
+local ft = require 'Comment.ft'
+
+ft.set('html', { '{{-- %s --}}', '{{-- %s --}}' })
 
 vim.cmd [[
     autocmd TermOpen * setlocal nospell
