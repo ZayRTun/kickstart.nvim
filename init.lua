@@ -819,6 +819,7 @@ require('lazy').setup({
   },
 
   -- colorschemes
+
   {
     'AlexvZyl/nordic.nvim',
     lazy = false,
@@ -841,6 +842,7 @@ require('lazy').setup({
       nord.load()
     end,
   },
+
   {
     'ellisonleao/gruvbox.nvim',
     lazy = false,
