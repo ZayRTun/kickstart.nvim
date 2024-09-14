@@ -1010,38 +1010,19 @@ require('lazy').setup({
     dependencies = {
       'nvim-lua/plenary.nvim',
     },
+    -- stylua: ignore
     config = function()
       local harpoon = require 'harpoon'
 
       harpoon:setup {}
 
-      vim.keymap.set('n', '<leader>a', function()
-        harpoon:list():add()
-      end, { desc = 'Add to Harpoon' })
-
-      vim.keymap.set('n', '<C-e>', function()
-        harpoon.ui:toggle_quick_menu(harpoon:list())
-      end, { desc = 'View Harpoon menu' })
-
-      vim.keymap.set('n', '<leader>1', function()
-        harpoon:list():select(1)
-      end, { desc = 'Goto Harpoon 1' })
-
-      vim.keymap.set('n', '<leader>2', function()
-        harpoon:list():select(2)
-      end, { desc = 'Goto Harpoon 2' })
-
-      vim.keymap.set('n', '<leader>3', function()
-        harpoon:list():select(3)
-      end, { desc = 'Goto Harpoon 3' })
-
-      vim.keymap.set('n', '<leader>4', function()
-        harpoon:list():select(4)
-      end, { desc = 'Goto Harpoon 4' })
-
-      vim.keymap.set('n', '<leader>5', function()
-        harpoon:list():select(5)
-      end, { desc = 'Goto Harpoon 5' })
+      vim.keymap.set('n', '<leader>a', function() harpoon:list():add() end, { desc = 'Add to Harpoon' })
+      vim.keymap.set('n', '<C-e>', function() harpoon.ui:toggle_quick_menu(harpoon:list()) end, { desc = 'View Harpoon menu' })
+      vim.keymap.set('n', '<leader>1', function() harpoon:list():select(1) end, { desc = 'Goto Harpoon 1' })
+      vim.keymap.set('n', '<leader>2', function() harpoon:list():select(2) end, { desc = 'Goto Harpoon 2' })
+      vim.keymap.set('n', '<leader>3', function() harpoon:list():select(3) end, { desc = 'Goto Harpoon 3' })
+      vim.keymap.set('n', '<leader>4', function() harpoon:list():select(4) end, { desc = 'Goto Harpoon 4' })
+      vim.keymap.set('n', '<leader>5', function() harpoon:list():select(5) end, { desc = 'Goto Harpoon 5' })
     end,
   },
 
@@ -1061,11 +1042,11 @@ require('lazy').setup({
     opts = {},
     -- stylua: ignore
     keys = {
-      { "s", mode = { "n", "x", "o" }, function() require("flash").jump() end, desc = "Flash" },
-      { "S", mode = { "n", "x", "o" }, function() require("flash").treesitter() end, desc = "Flash Treesitter" },
+      { "<cr>", mode = { "n", "x", "o" }, function() require("flash").jump() end, desc = "Flash" },
+      { "<c-cr>", mode = { "n", "x", "o" }, function() require("flash").treesitter() end, desc = "Flash Treesitter" },
       -- { "r", mode = "o", function() require("flash").remote() end, desc = "Remote Flash" },
       -- { "R", mode = { "o", "x" }, function() require("flash").treesitter_search() end, desc = "Treesitter Search" },
-      { "<c-s>", mode = { "c" }, function() require("flash").toggle() end, desc = "Toggle Flash Search" },
+      -- { "<c-s>", mode = { "c" }, function() require("flash").toggle() end, desc = "Toggle Flash Search" },
     },
   },
 
@@ -1095,22 +1076,16 @@ require('lazy').setup({
     event = 'VeryLazy',
     opts = {},
     dependencies = {
-      -- if you lazy-load any plugin below, make sure to add proper `module="..."` entries
       'MunifTanjim/nui.nvim',
-      -- OPTIONAL:
-      --   `nvim-notify` is only needed, if you want to use the notification view.
-      --   If not available, we use `mini` as the fallback
-      -- 'rcarriga/nvim-notify',
     },
 
     config = function()
       require('noice').setup {
         lsp = {
-          -- override markdown rendering so that **cmp** and other plugins use **Treesitter**
           override = {
             ['vim.lsp.util.convert_input_to_markdown_lines'] = true,
             ['vim.lsp.util.stylize_markdown'] = true,
-            ['cmp.entry.get_documentation'] = true, -- requires hrsh7th/nvim-cmp
+            ['cmp.entry.get_documentation'] = true,
           },
         },
         -- you can enable a preset for easier configuration
