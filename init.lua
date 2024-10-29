@@ -96,7 +96,8 @@ vim.opt.winminwidth = 5
 vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
 
 -- Diagnostic keymaps
-vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
+-- vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
+-- vim.keymap.set('n', '<leader>dn', vim.diagnostic.goto_next, { buffer = 0, desc = 'Go to next diagnostic in current buffer' })
 
 -- Exit terminal mode in the builtin terminal with a shortcut that is a bit easier
 -- for people to discover. Otherwise, you normally need to press <C-\><C-n>, which
@@ -346,7 +347,7 @@ require('lazy').setup({
           file_ignore_patterns = {
             '.git/',
             'node_modules',
-            -- 'vendor',
+            'vendor',
             'public/vendor',
           },
         },
@@ -374,6 +375,13 @@ require('lazy').setup({
       vim.keymap.set('n', '<leader>sh', builtin.help_tags, { desc = '[S]earch [H]elp' })
       vim.keymap.set('n', '<leader>sk', builtin.keymaps, { desc = '[S]earch [K]eymaps' })
       vim.keymap.set('n', '<leader><leader>', builtin.find_files, { desc = '[S]earch [F]iles' })
+      --[[ vim.keymap.set('n', '<leader><leader>', function()
+        require('telescope.builtin').find_files {
+          hidden = true, -- Include hidden files
+          no_ignore = true,
+        }
+      end, { desc = '[S]earch [F]iles (including hidden and ignored)' }) ]]
+      -- vim.keymap.set('n', '<leader><leader>', ':Telescope find_files hidden=true<CR>', { desc = '[S]earch [F]iles' })
       vim.keymap.set('n', '<leader>ss', builtin.builtin, { desc = '[S]earch [S]elect Telescope' })
       vim.keymap.set('n', '<leader>sw', builtin.grep_string, { desc = '[S]earch current [W]ord' })
       vim.keymap.set('n', '<leader>sg', builtin.live_grep, { desc = '[S]earch by [G]rep' })
@@ -443,10 +451,11 @@ require('lazy').setup({
       vim.lsp.handlers['textDocument/hover'] = vim.lsp.with(vim.lsp.handlers.hover, {
         border = 'rounded',
       })
-      -- vim.diagnostic.config {
-      --   virtual_text = false,
-      --   float = { border = 'rounded' },
-      -- }
+
+      vim.diagnostic.config {
+        virtual_text = true,
+        float = { border = 'rounded' },
+      }
 
       vim.api.nvim_create_autocmd('LspAttach', {
         group = vim.api.nvim_create_augroup('kickstart-lsp-attach', { clear = true }),
@@ -1283,6 +1292,44 @@ require('lazy').setup({
       hl(0, 'MultiCursorDisabledVisual', { link = 'Visual' })
       hl(0, 'MultiCursorDisabledSign', { link = 'SignColumn' })
     end,
+  },
+
+  {
+    'folke/trouble.nvim',
+    opts = {}, -- for default options, refer to the configuration section for custom setup.
+    cmd = 'Trouble',
+    keys = {
+      {
+        '<leader>xx',
+        '<cmd>Trouble diagnostics toggle<cr>',
+        desc = 'Diagnostics (Trouble)',
+      },
+      {
+        '<leader>xX',
+        '<cmd>Trouble diagnostics toggle filter.buf=0<cr>',
+        desc = 'Buffer Diagnostics (Trouble)',
+      },
+      {
+        '<leader>cs',
+        '<cmd>Trouble symbols toggle focus=false<cr>',
+        desc = 'Symbols (Trouble)',
+      },
+      {
+        '<leader>cl',
+        '<cmd>Trouble lsp toggle focus=false win.position=right<cr>',
+        desc = 'LSP Definitions / references / ... (Trouble)',
+      },
+      {
+        '<leader>xL',
+        '<cmd>Trouble loclist toggle<cr>',
+        desc = 'Location List (Trouble)',
+      },
+      {
+        '<leader>xQ',
+        '<cmd>Trouble qflist toggle<cr>',
+        desc = 'Quickfix List (Trouble)',
+      },
+    },
   },
 
   -- The following two comments only work if you have downloaded the kickstart repo, not just copy pasted the
