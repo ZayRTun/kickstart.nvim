@@ -453,8 +453,8 @@ require('lazy').setup({
       })
 
       vim.diagnostic.config {
-        virtual_text = true,
-        float = { border = 'rounded' },
+        virtual_text = false,
+        -- float = { border = 'rounded' },
       }
 
       vim.api.nvim_create_autocmd('LspAttach', {
@@ -577,7 +577,7 @@ require('lazy').setup({
         --    https://github.com/pmizio/typescript-tools.nvim
         --
         -- But for many setups, the LSP (`tsserver`) will work just fine
-        -- tsserver = {},
+        ts_ls = {},
         --
         intelephense = {},
 
@@ -635,6 +635,17 @@ require('lazy').setup({
       }
     end,
   },
+
+  --[[ {
+    'rachartier/tiny-inline-diagnostic.nvim',
+    event = 'VeryLazy', -- Or `LspAttach`
+    priority = 1000, -- needs to be loaded in first
+    config = function()
+      require('tiny-inline-diagnostic').setup {
+        preset = 'classic',
+      }
+    end,
+  }, ]]
 
   { -- Auto format
     'stevearc/conform.nvim',
@@ -1296,7 +1307,9 @@ require('lazy').setup({
 
   {
     'folke/trouble.nvim',
-    opts = {}, -- for default options, refer to the configuration section for custom setup.
+    opts = {
+      auto_close = true,
+    }, -- for default options, refer to the configuration section for custom setup.
     cmd = 'Trouble',
     keys = {
       {
