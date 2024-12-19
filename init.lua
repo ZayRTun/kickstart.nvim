@@ -11,7 +11,7 @@ vim.opt.relativenumber = true
 -- Enable mouse mode, can be useful for resizing splits for example!
 vim.opt.mouse = 'a'
 
--- vim.opt.cmdheight = 0
+vim.opt.cmdheight = 0
 
 -- Don't show the mode, since it's already in the status line
 vim.opt.showmode = false
@@ -130,7 +130,7 @@ vim.keymap.set('n', 'n', 'nzzzv', { desc = 'Keep search terms in the middle' })
 vim.keymap.set('n', 'N', 'Nzzzv', { desc = 'Keep search terms in the middle' })
 
 -- lazygit
-vim.keymap.set('n', '<leader>gg', '<cmd>LazyGit<cr>', { desc = 'Open LazyGit Window' })
+-- vim.keymap.set('n', '<leader>gg', '<cmd>LazyGit<cr>', { desc = 'Open LazyGit Window' })
 
 -- quit
 vim.keymap.set('n', '<leader>qq', '<cmd>qa<cr>', { desc = 'Quit all' })
@@ -157,9 +157,6 @@ vim.keymap.set('v', 'K', ":m '<-2<CR>gv=gv", { desc = 'Move highlighted line up'
 vim.keymap.set('n', '<S-l>', '<cmd>bnext<cr>', { desc = 'Next buffer' })
 vim.keymap.set('n', '<S-h>', '<cmd>bprevious<cr>', { desc = 'Prev buffer' })
 vim.keymap.set('n', '<leader>`', '<cmd>e #<cr>', { desc = 'Switch to Other Buffer' })
-
--- Delete buffer
-vim.keymap.set('n', '<leader>bd', '<cmd>lua MiniBufremove.delete(nil, false)<cr>', { desc = 'Delete current buffer' })
 
 -- save file
 vim.keymap.set({ 'i', 'x', 'n', 's' }, '<C-s>', '<cmd>w<cr><esc>', { desc = 'Save file' })
@@ -203,18 +200,75 @@ vim.opt.rtp:prepend(lazypath)
 
 -- Plugins
 require('lazy').setup({
+  {
+    'folke/snacks.nvim',
+    priority = 1000,
+    lazy = false,
+    ---
+    ---@type snacks.Config
+    opts = {
+      scratch = { enabled = false },
+      bigfile = { enabled = true },
+      dashboard = { enabled = true },
+      notifier = {
+        enabled = true,
+        timeout = 3000,
+      },
+      quickfile = { enabled = true },
+      statuscolumn = { enabled = true },
+      words = { enabled = true },
+      styles = {
+        notification = {
+          wo = { wrap = true }, -- Wrap notifications
+        },
+      },
+    },
+        -- stylua: ignore
+    keys = {
+      { '<leader>ut', function() Snacks.notifier.show_history() end, desc = 'Notification History'},
+      { '<leader>bd', function() Snacks.bufdelete() end, desc = 'Delete Buffer'},
+      { '<leader>cR', function() Snacks.rename.rename_file() end, desc = 'Rename File'},
+      { '<leader>gB', function() Snacks.gitbrowse() end, desc = 'Git Browse' },
+      { '<leader>gb', function() Snacks.git.blame_line() end, desc = 'Git Blame Line'},
+      { '<leader>gf', function() Snacks.lazygit.log_file() end, desc = 'Lazygit Current File History'},
+      { '<leader>gg', function() Snacks.lazygit() end, desc = 'Lazygit'},
+      { '<leader>gl', function() Snacks.lazygit.log() end, desc = 'Lazygit Log (cwd)'},
+      { '<leader>un', function() Snacks.notifier.hide() end, desc = 'Dismiss All Notifications'},
+      { '<c-`>', function() Snacks.terminal() end, desc = 'Toggle Terminal'},
+      { ']]', function() Snacks.words.jump(vim.v.count1) end, desc = 'Next Reference', mode = { 'n', 't' }},
+      { '[[', function() Snacks.words.jump(-vim.v.count1) end, desc = 'Prev Reference', mode = { 'n', 't' }},
+    },
+    init = function()
+      vim.api.nvim_create_autocmd('User', {
+        pattern = 'VeryLazy',
+        callback = function()
+          -- Setup some globals for debugging (lazy-loaded)
+          _G.dd = function(...)
+            Snacks.debug.inspect(...)
+          end
+          _G.bt = function()
+            Snacks.debug.backtrace()
+          end
+          vim.print = _G.dd -- Override print to use snacks for `:=` command
+
+          -- Create some toggle mappings
+          Snacks.toggle.option('spell', { name = 'Spelling' }):map '<leader>us'
+          Snacks.toggle.option('wrap', { name = 'Wrap' }):map '<leader>uw'
+          Snacks.toggle.option('relativenumber', { name = 'Relative Number' }):map '<leader>uL'
+          Snacks.toggle.diagnostics():map '<leader>ud'
+          Snacks.toggle.line_number():map '<leader>ul'
+          Snacks.toggle.option('conceallevel', { off = 0, on = vim.o.conceallevel > 0 and vim.o.conceallevel or 2 }):map '<leader>uc'
+          Snacks.toggle.treesitter():map '<leader>uT'
+          Snacks.toggle.option('background', { off = 'light', on = 'dark', name = 'Dark Background' }):map '<leader>ub'
+          Snacks.toggle.inlay_hints():map '<leader>uh'
+        end,
+      })
+    end,
+  },
+
   { -- Adds git related signs to the gutter, as well as utilities for managing changes
     'lewis6991/gitsigns.nvim',
     opts = {},
-    -- opts = {
-    --   signs = {
-    --     add = { text = '+' },
-    --     change = { text = '~' },
-    --     delete = { text = '_' },
-    --     topdelete = { text = '‾' },
-    --     changedelete = { text = '~' },
-    --   },
-    -- },
   },
 
   { -- laravel blade navigation
@@ -275,6 +329,10 @@ require('lazy').setup({
         { '<leader>w', group = '[W]orkspace' },
         { '<leader>t', group = '[T]oggle' },
         { '<leader>h', group = 'Git [H]unk', mode = { 'n', 'v' } },
+        { '<leader>u', group = 'Snack Toggles' },
+        { '<leader>q', group = 'Quit' },
+        { '<leader>R', group = 'Replace using Regex' },
+        { '<leader>b', group = 'Buffer' },
       },
     },
   },
@@ -571,12 +629,6 @@ require('lazy').setup({
         -- gopls = {},
         -- pyright = {},
         -- rust_analyzer = {},
-        -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
-        --
-        -- Some languages (like typescript) have entire language plugins that can be useful:
-        --    https://github.com/pmizio/typescript-tools.nvim
-        --
-        -- But for many setups, the LSP (`tsserver`) will work just fine
         ts_ls = {},
         --
         intelephense = {},
@@ -636,17 +688,6 @@ require('lazy').setup({
     end,
   },
 
-  --[[ {
-    'rachartier/tiny-inline-diagnostic.nvim',
-    event = 'VeryLazy', -- Or `LspAttach`
-    priority = 1000, -- needs to be loaded in first
-    config = function()
-      require('tiny-inline-diagnostic').setup {
-        preset = 'classic',
-      }
-    end,
-  }, ]]
-
   { -- Auto format
     'stevearc/conform.nvim',
     event = { 'BufWritePre' },
@@ -675,7 +716,7 @@ require('lazy').setup({
           lsp_format_opt = 'fallback'
         end
         return {
-          timeout_ms = 500,
+          timeout_ms = 1000,
           lsp_format = lsp_format_opt,
         }
       end,
@@ -1013,16 +1054,6 @@ require('lazy').setup({
 
   { 'numToStr/Comment.nvim', opts = {} },
 
-  { 'echasnovski/mini.bufremove', opts = {} },
-
-  {
-    'akinsho/toggleterm.nvim',
-    version = '*',
-    opts = {
-      open_mapping = [[<C-`>]],
-    },
-  },
-
   {
     'ThePrimeagen/harpoon',
     branch = 'harpoon2',
@@ -1046,9 +1077,9 @@ require('lazy').setup({
     end,
   },
 
-  {
+  --[[ {
     'kdheepak/lazygit.nvim',
-  },
+  }, ]]
 
   {
     'abecodes/tabout.nvim',
@@ -1094,7 +1125,7 @@ require('lazy').setup({
     end,
   },
 
-  --[[ {
+  {
     'folke/noice.nvim',
     event = 'VeryLazy',
     opts = {},
@@ -1105,6 +1136,7 @@ require('lazy').setup({
     config = function()
       require('noice').setup {
         lsp = {
+          hover = { silent = true },
           override = {
             ['vim.lsp.util.convert_input_to_markdown_lines'] = true,
             ['vim.lsp.util.stylize_markdown'] = true,
@@ -1121,7 +1153,7 @@ require('lazy').setup({
         },
       }
     end,
-  }, ]]
+  },
 
   {
     'nvim-lualine/lualine.nvim',
@@ -1227,7 +1259,7 @@ require('lazy').setup({
       -- Add or skip adding a new cursor by matching word/selection
       set({ 'n', 'v' }, '<leader>n', function()
         mc.matchAddCursor(1)
-      end)
+      end, { desc = 'Add Cursor' })
       set({ 'n', 'v' }, '<leader>m', function()
         mc.matchSkipCursor(1)
       end)
@@ -1237,6 +1269,9 @@ require('lazy').setup({
       set({ 'n', 'v' }, '<leader>M', function()
         mc.matchSkipCursor(-1)
       end)
+
+      -- Add all matches in the document
+      set({ 'n', 'v' }, '<leader>A', mc.matchAllAddCursors)
 
       -- You can also add cursors with any motion you prefer:
       -- set("n", "<right>", function()
@@ -1263,15 +1298,18 @@ require('lazy').setup({
       set({ 'n', 'v' }, '<leader><c-q>', mc.duplicateCursors)
 
       set('n', '<esc>', function()
-        vim.cmd 'nohlsearch'
         if not mc.cursorsEnabled() then
           mc.enableCursors()
         elseif mc.hasCursors() then
           mc.clearCursors()
         else
           -- Default <esc> handler.
+          vim.cmd 'nohlsearch'
         end
       end)
+
+      -- bring back cursors if you accidentally clear them
+      set('n', '<leader>gv', mc.restoreCursors)
 
       -- Align cursor columns.
       set('v', '<leader>a', mc.alignCursors)
@@ -1293,6 +1331,10 @@ require('lazy').setup({
       set('v', '<leader>T', function()
         mc.transposeCursors(-1)
       end)
+
+      -- Jumplist support
+      set({ 'v', 'n' }, '<c-i>', mc.jumpForward)
+      set({ 'v', 'n' }, '<c-o>', mc.jumpBackward)
 
       -- Customize how cursors look.
       local hl = vim.api.nvim_set_hl
