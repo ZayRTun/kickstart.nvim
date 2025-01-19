@@ -8,7 +8,8 @@ return {
   config = function()
     require('oil').setup {
       keymaps = {
-        ['<C-v>'] = false,
+        ['<C-s>'] = false,
+        ['<C-v>'] = { 'actions.select', opts = { vertical = true } },
       },
 
       watch_for_changes = true,
