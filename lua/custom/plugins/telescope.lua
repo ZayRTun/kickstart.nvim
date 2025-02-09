@@ -71,9 +71,9 @@ return { -- Fuzzy Finder (files, lsp, etc)
         },
       },
       pickers = {
-        --[[ find_files = {
+        find_files = {
           theme = 'dropdown',
-        }, ]]
+        },
       },
       extensions = {
         ['ui-select'] = {

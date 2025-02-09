@@ -21,11 +21,47 @@ return {
           colorscheme = 'kanagawa-dragon',
         },
         {
-          name = 'kanagawa-lotus',
-          colorscheme = 'kanagawa-lotus',
+          name = 'mellow',
+          colorscheme = 'mellow',
+        },
+        {
+          name = 'oldworld',
+          colorscheme = 'oldworld',
+        },
+        {
+          name = 'catppuccin frappe',
+          colorscheme = 'catppuccin-frappe',
+        },
+        {
+          name = 'catppuccin macchiato',
+          colorscheme = 'catppuccin-macchiato',
+        },
+        {
+          name = 'macchiato mocha',
+          colorscheme = 'catppuccin-mocha',
         },
       },
     },
+  },
+  {
+    'catppuccin/nvim',
+    name = 'catppuccin',
+    priority = 1000,
+    config = function()
+      require('catppuccin').setup {
+        transparent_background = true,
+      }
+    end,
+  },
+  {
+    'dgox16/oldworld.nvim',
+    lazy = false,
+    priority = 1000,
+    config = function()
+      require('oldworld').setup {
+        variant = 'oled',
+      }
+    end,
   },
   {
     'ellisonleao/gruvbox.nvim',
@@ -100,6 +136,19 @@ return {
           }
         end,
       }
+    end,
+  },
+  {
+    'mellow-theme/mellow.nvim',
+    priority = 1000,
+    lazy = false,
+    config = function()
+      vim.g.mellow_transparent = true
+      -- vim.g.mellow_italic_functions = true -- Optional: Enable italic functions
+      vim.g.mellow_bold_functions = true -- Optional: Enable bold functions
+
+      -- Apply the colorscheme
+      vim.cmd.colorscheme 'mellow'
     end,
   },
 }

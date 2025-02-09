@@ -66,5 +66,8 @@ vim.api.nvim_create_autocmd('VimEnter', {
   callback = update_title_with_cwd,
 })
 
+require 'custom.statuscolumn'
+vim.o.statuscolumn = "%!v:lua.require'custom.statuscolumn'.statuscolumn()"
+
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
