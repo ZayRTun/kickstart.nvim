@@ -45,12 +45,6 @@ require('lazy').setup({
   },
 })
 
-vim.filetype.add {
-  pattern = {
-    ['.*%.blade%.php'] = 'blade',
-  },
-}
-
 vim.cmd [[
     autocmd TermOpen * setlocal nospell
 ]]

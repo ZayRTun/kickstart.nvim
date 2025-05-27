@@ -5,6 +5,7 @@ return { -- Highlight, edit, and navigate code
   dependencies = { 'nvim-treesitter/nvim-treesitter-textobjects' },
   opts = {
     ensure_installed = {
+      'blade',
       'bash',
       'c',
       'comment',
@@ -20,6 +21,7 @@ return { -- Highlight, edit, and navigate code
       'html',
       'http',
       'ini',
+      'dart',
       'javascript',
       'json',
       'jsonc',
@@ -70,7 +72,7 @@ return { -- Highlight, edit, and navigate code
   --    - Show your current context: https://github.com/nvim-treesitter/nvim-treesitter-context
   --    - Treesitter + textobjects: https://github.com/nvim-treesitter/nvim-treesitter-textobjects
 
-  config = function(_, opts)
+  --[[ config = function(_, opts)
     local parser_config = require('nvim-treesitter.parsers').get_parser_configs()
 
     parser_config.blade = {
@@ -83,5 +85,5 @@ return { -- Highlight, edit, and navigate code
     }
 
     require('nvim-treesitter.configs').setup(opts)
-  end,
+  end, ]]
 }
