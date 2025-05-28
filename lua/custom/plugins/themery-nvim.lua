@@ -2,46 +2,65 @@ return {
   {
     'zaldih/themery.nvim',
     lazy = false,
-    opts = {
-      themes = {
-        {
-          name = 'gruvbox-dark',
-          colorscheme = 'gruvbox',
+    config = function()
+      require('themery').setup {
+        themes = {
+          {
+            name = 'gruvbox-dark',
+            colorscheme = 'gruvbox',
+          },
+          {
+            name = 'rose-pine',
+            colorscheme = 'rose-pine',
+          },
+          {
+            name = 'rose-pine-main',
+            colorscheme = 'rose-pine',
+          },
+          {
+            name = 'rose-pine-moon',
+            colorscheme = 'rose-pine',
+          },
+          {
+            name = 'rose-pine-dawn',
+            colorscheme = 'rose-pine',
+          },
+          {
+            name = 'kanagawa-wave',
+            colorscheme = 'kanagawa-wave',
+          },
+          {
+            name = 'kanagawa-dragon',
+            colorscheme = 'kanagawa-dragon',
+          },
+          {
+            name = 'mellow',
+            colorscheme = 'mellow',
+          },
+          {
+            name = 'oldworld',
+            colorscheme = 'oldworld',
+          },
+          {
+            name = 'catppuccin frappe',
+            colorscheme = 'catppuccin-frappe',
+          },
+          {
+            name = 'catppuccin macchiato',
+            colorscheme = 'catppuccin-macchiato',
+          },
+          {
+            name = 'catppuccin mocha',
+            colorscheme = 'catppuccin-mocha',
+          },
+          {
+            name = 'catppuccin latte',
+            colorscheme = 'catppuccin-latte',
+          },
         },
-        {
-          name = 'rose-pine',
-          colorscheme = 'rose-pine',
-        },
-        {
-          name = 'kanagawa-wave',
-          colorscheme = 'kanagawa-wave',
-        },
-        {
-          name = 'kanagawa-dragon',
-          colorscheme = 'kanagawa-dragon',
-        },
-        {
-          name = 'mellow',
-          colorscheme = 'mellow',
-        },
-        {
-          name = 'oldworld',
-          colorscheme = 'oldworld',
-        },
-        {
-          name = 'catppuccin frappe',
-          colorscheme = 'catppuccin-frappe',
-        },
-        {
-          name = 'catppuccin macchiato',
-          colorscheme = 'catppuccin-macchiato',
-        },
-        {
-          name = 'macchiato mocha',
-          colorscheme = 'catppuccin-mocha',
-        },
-      },
-    },
+        livePreview = true,
+      }
+    end,
   },
   {
     'catppuccin/nvim',

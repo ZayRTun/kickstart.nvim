@@ -38,9 +38,6 @@ vim.keymap.set('n', 'J', 'mzJ`z', { desc = 'Remain cursor in place when joining 
 vim.keymap.set('n', 'n', 'nzzzv', { desc = 'Keep search terms in the middle' })
 vim.keymap.set('n', 'N', 'Nzzzv', { desc = 'Keep search terms in the middle' })
 
--- lazygit
--- vim.keymap.set('n', '<leader>gg', '<cmd>LazyGit<cr>', { desc = 'Open LazyGit Window' })
-
 -- quit
 vim.keymap.set('n', '<leader>qq', '<cmd>qa<cr>', { desc = 'Quit all' })
 
@@ -53,10 +50,10 @@ vim.keymap.set('n', '<leader>-', '<C-W>s', { desc = 'Split window below', remap 
 vim.keymap.set('n', '<leader>|', '<C-W>v', { desc = 'Split window right', remap = true })
 
 -- Resize window using <ctrl> arrow keys
-vim.keymap.set('n', '<C-Up>', '<cmd>resize +2<cr>', { desc = 'Increase window height' })
-vim.keymap.set('n', '<C-Down>', '<cmd>resize -2<cr>', { desc = 'Decrease window height' })
-vim.keymap.set('n', '<C-Left>', '<cmd>vertical resize -2<cr>', { desc = 'Decrease window width' })
-vim.keymap.set('n', '<C-Right>', '<cmd>vertical resize +2<cr>', { desc = 'Increase window width' })
+vim.keymap.set('n', '<C-S-K>', '<cmd>resize +2<cr>', { desc = 'Increase window height' })
+vim.keymap.set('n', '<C-S-J>', '<cmd>resize -2<cr>', { desc = 'Decrease window height' })
+vim.keymap.set('n', '<C-S-h>', '<cmd>vertical resize -2<cr>', { desc = 'Decrease window width' })
+vim.keymap.set('n', '<C-S-l>', '<cmd>vertical resize +2<cr>', { desc = 'Increase window width' })
 
 -- Move highlighted lines up/down
 vim.keymap.set('v', 'J', ":m '>+1<CR>gv=gv", { desc = 'Move highlighted line down' })

@@ -60,6 +60,14 @@ vim.api.nvim_create_autocmd('VimEnter', {
   callback = update_title_with_cwd,
 })
 
+vim.cmd [[
+  highlight CursorLine ctermbg=none guibg=#0f0f0f gui=NONE cterm=NONE
+  augroup CursorLineTransparency
+    autocmd!
+    autocmd ColorScheme * highlight CursorLine guibg=#0f0f0f ctermbg=none
+  augroup END
+]]
+
 require 'custom.statuscolumn'
 vim.o.statuscolumn = "%!v:lua.require'custom.statuscolumn'.statuscolumn()"
 
