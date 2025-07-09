@@ -1,57 +1,18 @@
 return { -- Main LSP Configuration
   'neovim/nvim-lspconfig',
   dependencies = {
-    -- NOTE: `opts = {}` is the same as calling `require('mason').setup({})`
     { 'mason-org/mason.nvim', opts = {} },
     'mason-org/mason-lspconfig.nvim',
     'WhoIsSethDaniel/mason-tool-installer.nvim',
 
     -- Useful status updates for LSP.
-    -- NOTE: `opts = {}` is the same as calling `require('fidget').setup({})`
     { 'j-hui/fidget.nvim', opts = {} },
 
     -- Allows extra capabilities provided by nvim-cmp/blink
-    -- 'hrsh7th/cmp-nvim-lsp',
     'saghen/blink.cmp',
   },
 
   config = function()
-    vim.lsp.handlers['textDocument/hover'] = vim.lsp.with(vim.lsp.handlers.hover, {
-      border = 'rounded',
-    })
-
-    -- vim.diagnostic.config {
-    --   virtual_text = false,
-    --   -- float = { border = 'rounded' },
-    -- }
-
-    vim.diagnostic.config {
-      severity_sort = true,
-      float = { border = 'rounded', source = 'if_many' },
-      underline = { severity = vim.diagnostic.severity.ERROR },
-      signs = vim.g.have_nerd_font and {
-        text = {
-          [vim.diagnostic.severity.ERROR] = '󰅚 ',
-          [vim.diagnostic.severity.WARN] = '󰀪 ',
-          [vim.diagnostic.severity.INFO] = '󰋽 ',
-          [vim.diagnostic.severity.HINT] = '󰌶 ',
-        },
-      } or {},
-      virtual_text = {
-        source = 'if_many',
-        spacing = 2,
-        format = function(diagnostic)
-          local diagnostic_message = {
-            [vim.diagnostic.severity.ERROR] = diagnostic.message,
-            [vim.diagnostic.severity.WARN] = diagnostic.message,
-            [vim.diagnostic.severity.INFO] = diagnostic.message,
-            [vim.diagnostic.severity.HINT] = diagnostic.message,
-          }
-          return diagnostic_message[diagnostic.severity]
-        end,
-      },
-    }
-
     vim.api.nvim_create_autocmd('LspAttach', {
       group = vim.api.nvim_create_augroup('kickstart-lsp-attach', { clear = true }),
       callback = function(event)
@@ -118,13 +79,62 @@ return { -- Main LSP Configuration
           })
         end
 
-        if client and client.supports_method(vim.lsp.protocol.Methods.textDocument_inlayHint) then
-          map('<leader>th', function()
+        if client and client_supports_method(client, vim.lsp.protocol.Methods.textDocument_inlayHint, event.buf) then
+          map('<leader>ih', function()
             vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled { bufnr = event.buf })
           end, '[T]oggle Inlay [H]ints')
         end
       end,
     })
+
+    -- Diagnostic Config
+    -- See :help vim.diagnostic.Opts
+    vim.diagnostic.config {
+      severity_sort = true,
+      float = { border = 'rounded', source = 'if_many' },
+      underline = { severity = vim.diagnostic.severity.ERROR },
+      signs = vim.g.have_nerd_font and {
+        text = {
+          [vim.diagnostic.severity.ERROR] = '󰅚 ',
+          [vim.diagnostic.severity.WARN] = '󰀪 ',
+          [vim.diagnostic.severity.INFO] = '󰋽 ',
+          [vim.diagnostic.severity.HINT] = '󰌶 ',
+        },
+      } or {},
+      --[[ virtual_text = {
+        source = 'if_many',
+        spacing = 2,
+        format = function(diagnostic)
+          local diagnostic_message = {
+            [vim.diagnostic.severity.ERROR] = diagnostic.message,
+            [vim.diagnostic.severity.WARN] = diagnostic.message,
+            [vim.diagnostic.severity.INFO] = diagnostic.message,
+            [vim.diagnostic.severity.HINT] = diagnostic.message,
+          }
+          return diagnostic_message[diagnostic.severity]
+        end,
+      }, ]]
+
+      virtual_lines = {
+        current_line = true,
+        source = 'if_many',
+        spacing = 2,
+        format = function(diagnostic)
+          local diagnostic_message = {
+            [vim.diagnostic.severity.ERROR] = diagnostic.message,
+            [vim.diagnostic.severity.WARN] = diagnostic.message,
+            [vim.diagnostic.severity.INFO] = diagnostic.message,
+            [vim.diagnostic.severity.HINT] = diagnostic.message,
+          }
+          return diagnostic_message[diagnostic.severity]
+        end,
+      },
+    }
+
+    --[[ vim.diagnostic.config {
+      virtual_text = { current_line = true },
+      vi
+    } ]]
 
     local capabilities = require('blink.cmp').get_lsp_capabilities()
 
@@ -188,7 +198,7 @@ return { -- Main LSP Configuration
     }
 
     require('mason-lspconfig').setup {
-      -- ensure_installed = {},
+      ensure_installed = {},
       automatic_installation = true,
       handlers = {
         function(server_name)
