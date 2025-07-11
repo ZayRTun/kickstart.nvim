@@ -5,10 +5,8 @@ return { -- Main LSP Configuration
     'mason-org/mason-lspconfig.nvim',
     'WhoIsSethDaniel/mason-tool-installer.nvim',
 
-    -- Useful status updates for LSP.
     { 'j-hui/fidget.nvim', opts = {} },
 
-    -- Allows extra capabilities provided by nvim-cmp/blink
     'saghen/blink.cmp',
   },
 
@@ -37,11 +35,10 @@ return { -- Main LSP Configuration
 
         map('<leader>ws', require('telescope.builtin').lsp_dynamic_workspace_symbols, '[W]orkspace [S]ymbols')
 
-        -- WARN: This is not Goto Definition, this is Goto Declaration.
-        --  For example, in C this would take you to the header.
         map('gD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
 
-        -- This function resolves a difference between neovim nightly (version 0.11) and stable (version 0.10)
+        -- map('<leader>pa', vim.lsp.buf.code_action, '[P]HPactor [A]ction (Refactor)')
+
         ---@param client vim.lsp.Client
         ---@param method vim.lsp.protocol.Method
         ---@param bufnr? integer some lsp support methods only in specific files
@@ -87,8 +84,6 @@ return { -- Main LSP Configuration
       end,
     })
 
-    -- Diagnostic Config
-    -- See :help vim.diagnostic.Opts
     vim.diagnostic.config {
       severity_sort = true,
       float = { border = 'rounded', source = 'if_many' },
@@ -101,22 +96,7 @@ return { -- Main LSP Configuration
           [vim.diagnostic.severity.HINT] = '󰌶 ',
         },
       } or {},
-      --[[ virtual_text = {
-        source = 'if_many',
-        spacing = 2,
-        format = function(diagnostic)
-          local diagnostic_message = {
-            [vim.diagnostic.severity.ERROR] = diagnostic.message,
-            [vim.diagnostic.severity.WARN] = diagnostic.message,
-            [vim.diagnostic.severity.INFO] = diagnostic.message,
-            [vim.diagnostic.severity.HINT] = diagnostic.message,
-          }
-          return diagnostic_message[diagnostic.severity]
-        end,
-      }, ]]
-
-      virtual_lines = {
-        current_line = true,
+      virtual_text = {
         source = 'if_many',
         spacing = 2,
         format = function(diagnostic)
@@ -131,37 +111,16 @@ return { -- Main LSP Configuration
       },
     }
 
-    --[[ vim.diagnostic.config {
-      virtual_text = { current_line = true },
-      vi
-    } ]]
-
     local capabilities = require('blink.cmp').get_lsp_capabilities()
 
     local servers = {
-      -- clangd = {},
-      -- gopls = {},
       pyright = {},
       rust_analyzer = {},
       ts_ls = {},
       intelephense = {},
       html = {},
       tailwindcss = {},
-
-      -- tailwindcss = {
-      --   settings = {
-      --     tailwindCSS = {
-      --       experimental = {
-      --         configFile = 'resources/css/app.css',
-      --       },
-      --     },
-      --   },
-      -- },
-
       lua_ls = {
-        -- cmd = {...},
-        -- filetypes = { ...},
-        -- capabilities = {},
         settings = {
           Lua = {
             completion = {
