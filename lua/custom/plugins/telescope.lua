@@ -70,11 +70,11 @@ return { -- Fuzzy Finder (files, lsp, etc)
           'public/vendor',
         },
       },
-      pickers = {
+      --[[ pickers = {
         find_files = {
           theme = 'dropdown',
         },
-      },
+      }, ]]
       extensions = {
         ['ui-select'] = {
           require('telescope.themes').get_dropdown(),
