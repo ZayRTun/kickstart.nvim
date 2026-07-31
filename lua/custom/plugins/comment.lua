@@ -1,7 +1,12 @@
 return {
   'numToStr/Comment.nvim',
   dependencies = {
-    'JoosepAlviste/nvim-ts-context-commentstring',
+    {
+      'JoosepAlviste/nvim-ts-context-commentstring',
+      opts = {
+        enable_autocmd = false, -- Stops the CursorHold check that was crashing
+      },
+    },
   },
   opts = {
     pre_hook = function(ctx)
