@@ -1,10 +1,10 @@
 <div align="center">
 
-```
+<pre>
 ▄▄▄▄▄ ███  ██ ▄▄ ▄▄ ▄▄ ▄▄   ▄▄ 
   ▄█▀ ██ ▀▄██ ██▄██ ██ ██▀▄▀██ 
 ▄██▄▄ ██   ██  ▀█▀  ██ ██   ██ 
-```
+</pre>
 
 ### A personal Neovim configuration for full‑stack Laravel & Flutter development
 
