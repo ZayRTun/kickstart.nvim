@@ -19,8 +19,13 @@
 
 [![Neovim](https://img.shields.io/badge/Neovim-0.11+-57A143?logo=neovim&logoColor=white)](https://neovim.io)
 [![Lua](https://img.shields.io/badge/Lua-blue?logo=lua&logoColor=white)](https://www.lua.org)
+[![Based on kickstart.nvim](https://img.shields.io/badge/based_on-kickstart.nvim-5c2d91)](https://github.com/nvim-lua/kickstart.nvim)
 
 </div>
+
+---
+
+Built on **[kickstart.nvim](https://github.com/nvim-lua/kickstart.nvim)** and heavily customized with a modular plugin architecture, LSP‑first workflows, and a polished UI — all tailored for PHP/Laravel, Dart/Flutter, and Rust development.
 
 ---
 
