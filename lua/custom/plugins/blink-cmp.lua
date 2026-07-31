@@ -23,7 +23,6 @@ return { -- Autocompletion
       },
       opts = {},
     },
-    'folke/lazydev.nvim',
   },
   --- @module 'blink.cmp'
   --- @type blink.cmp.Config

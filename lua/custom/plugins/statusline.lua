@@ -48,11 +48,6 @@ return {
           },
         },
         lualine_x = {
-          -- {
-          --   lazy_status.updates,
-          --   cond = lazy_status.has_updates,
-          --   color = { fg = t_colors.orange_500 },
-          -- },
           { 'location' },
           { 'progress' },
           { 'selectioncount' },

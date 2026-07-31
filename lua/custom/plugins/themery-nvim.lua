@@ -161,13 +161,9 @@ return {
     'mellow-theme/mellow.nvim',
     priority = 1000,
     lazy = false,
-    config = function()
+    init = function()
       vim.g.mellow_transparent = true
-      -- vim.g.mellow_italic_functions = true -- Optional: Enable italic functions
-      vim.g.mellow_bold_functions = true -- Optional: Enable bold functions
-
-      -- Apply the colorscheme
-      vim.cmd.colorscheme 'mellow'
+      vim.g.mellow_bold_functions = true
     end,
   },
 }

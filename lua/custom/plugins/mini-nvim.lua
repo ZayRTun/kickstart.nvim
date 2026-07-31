@@ -1,6 +1,5 @@
-return { -- Collection of various small independent plugins/modules
-  'echasnovski/mini.nvim',
-  config = function()
-    require('mini.icons').setup()
-  end,
+return {
+  'echasnovski/mini.icons',
+  lazy = true,
+  opts = {},
 }

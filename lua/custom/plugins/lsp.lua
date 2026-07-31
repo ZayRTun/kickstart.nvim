@@ -140,22 +140,6 @@ return { -- Main LSP Configuration
     })
     require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
-    -- require('lspconfig').emmet_language_server.setup {
-    --   filetypes = {
-    --     'html',
-    --     'css',
-    --     'blade',
-    --     'javascript',
-    --     'javascriptreact',
-    --     'typescriptreact',
-    --     'sass',
-    --     'scss',
-    --     'less',
-    --     'pug',
-    --     'eruby',
-    --   },
-    -- }
-
     -- 1. Configure the server
     vim.lsp.config('emmet_language_server', {
       filetypes = {
