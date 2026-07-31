@@ -41,15 +41,9 @@ return { -- Autocompletion
     },
 
     sources = {
-      default = { 'lsp', 'buffer', 'snippets', 'blade-nav', 'path', 'lazydev' },
+      default = { 'lsp', 'buffer', 'snippets', 'path', 'lazydev' },
       providers = {
         lazydev = { module = 'lazydev.integrations.blink', score_offset = 100 },
-        ['blade-nav'] = {
-          module = 'blade-nav.blink',
-          opts = {
-            close_tag_on_complete = false, -- default: true,
-          },
-        },
       },
     },
 

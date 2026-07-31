@@ -176,6 +176,14 @@ return { -- Main LSP Configuration
     -- 2. Enable/Start the server
     vim.lsp.enable 'emmet_language_server'
 
+    vim.lsp.config('laravel_lsp', {
+      cmd = { 'laravel-lsp' },
+      filetypes = { 'php', 'blade' },
+      root_markers = { 'artisan', 'composer.json', '.git' },
+    })
+
+    vim.lsp.enable 'laravel_lsp'
+
     require('mason-lspconfig').setup {
       ensure_installed = {},
       automatic_installation = true,
