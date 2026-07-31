@@ -37,8 +37,6 @@ return { -- Main LSP Configuration
 
         map('gD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
 
-        -- map('<leader>pa', vim.lsp.buf.code_action, '[P]HPactor [A]ction (Refactor)')
-
         ---@param client vim.lsp.Client
         ---@param method vim.lsp.protocol.Method
         ---@param bufnr? integer some lsp support methods only in specific files

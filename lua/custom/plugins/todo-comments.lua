@@ -14,8 +14,7 @@ return {
     },
   },
   config = function(_, opts)
-    require('todo-comments').setup(opts) -- Apply the configuration
-    -- vim.keymap.set('n', '<leader>td', '<cmd>Trouble todo<cr>', { desc = 'Open Todo comments with Telescope' })
+    require('todo-comments').setup(opts)
     vim.keymap.set('n', '<leader>td', '<cmd>TodoTelescope<cr>', { desc = 'Open Todo comments with Telescope' })
   end,
 }
